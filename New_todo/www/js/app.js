@@ -24,18 +24,60 @@ app.run(function($ionicPlatform) {
 })
 
 
-app.controller('main', function ($scope, $ionicModal) {
+app.controller('main', function ($scope, $ionicModal,$ionicPopup) {
 
-var vm = this;
-
+	
 $scope.name_List= [
       {"name": "Rahul", "role": "developer"},
       {"name": "Anas", "role": "senior developer"},
       {"name": "Nargesh", "role": "developer"}
     ];
 
+	$ionicModal.fromTemplateUrl('new-task-modal.html', {
+        scope: $scope,
+        animation: 'slide-in-up'
+    }).then(function (modal) {
+        $scope.newTaskModal = modal;
+    });
 
 	
+	$scope.openTaskModal = function () {
+		 $scope.data = {};
+        $scope.newTaskModal.show();
+    };
 	
+	$scope.closeTaskModal = function () {
+        $scope.newTaskModal.hide();
+    };
+	
+		$scope.createTask = function (data) {
+        
+		if(data.supply == undefined)
+			data.supply = 0;
+		
+		if(data.rxNumber == undefined)
+			data.rxNumber = 0;
+		
+		if(data.qty == undefined)
+			data.qty = 0;
+		
+		if(data.route == undefined)
+			data.route = 0;
+		
+		var mata= data.rxNumber+data.qty+data.route+data.supply;
+		 $scope.showAlert(mata);
+		
+    };
+	
+
+	 $scope.showAlert = function(data) {
+     var alertPopup = $ionicPopup.alert({
+       title: 'Claim was Priced',
+       template: 'Submitted ingredient Cost '+data
+     });
+     alertPopup.then(function(res) {
+		 
+       });
+   };
 
 	})

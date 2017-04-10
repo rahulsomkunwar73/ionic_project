@@ -39,13 +39,46 @@
         <h1 class="title" ng-style="{'color': '#ffffff'}">FS Compounder</h1>
       </ion-header-bar>
       <ion-content>
-	     <ion-list>
-	  <ion-item class="text-center" ng-repeat="obj in name_List" >
+	     <ion-list ng-repeat="obj in name_List" >
+	  <ion-item class="text-center" ng-click="openTaskModal()">
 	      {{obj.name}}
         </ion-item>
 	   </ion-list>
+
 	  	  
       </ion-content>
     </ion-pane>
   </body>
+  <script id="new-task-modal.html" type="text/ng-template">
+    <ion-modal-view>
+        <ion-header-bar class="bar-stable" ng-style="{'background-color': '#faa730','color': '#ffffff'}">
+          <h1 class="title" ng-style="{'color': '#ffffff'}">FS Compounder</h1>
+            <button class="button button-icon" ng-click="closeTaskModal()">
+                <i class="icon ion-android-close" ng-style="{'color': '#ffffff'}"></i>
+            </button>
+        </ion-header-bar>
+        <ion-content>
+            <form ng-submit="createTask(data)">
+                <div class="list list-inset">
+                    <label class="item item-input">
+                        <input ng-model="data.rxNumber" type="number" placeholder="RX Number">
+                    </label>
+                    <label class="item item-input">
+                        <input ng-model="data.qty" type="number" placeholder="Qty Dispensed">
+                    </label>
+					 <label class="item item-input">
+                        <input ng-model="data.route" type="number" placeholder="Route">
+                    </label>
+                    <label class="item item-input">
+                        <input ng-model="data.supply" type="number" placeholder="Days Supply">
+                    </label>
+                 
+                    <button type="submit" class="button button-block button-positive" ng-style="{'background-color': '#ffffff'}"  ><i ng-style="{'color': '#faa730'}">Submit Claim</i></button>
+					
+                </div>
+            </form>
+        </ion-content>
+    </ion-modal-view>
+</script>
+ 
 </html>
