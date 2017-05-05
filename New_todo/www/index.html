@@ -7,15 +7,6 @@
 
     <link rel="manifest" href="manifest.json">
 
-    <!-- un-comment this code to enable service worker
-    <script>
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('service-worker.js')
-          .then(() => console.log('service worker installed'))
-          .catch(err => console.log('Error', err));
-      }
-    </script>-->
-
     <link href="lib/ionic/css/ionic.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
 
@@ -47,7 +38,7 @@
 </label>
 
 </div>
-	     <ion-list ng-repeat="obj in name_Lists | filter:search" >
+	     <ion-list ng-repeat="obj in name_List | filter:search" >
 	  <ion-item class="text-Left" ng-click="openTaskModal(obj)" style="padding: 5px;"  >
 	      {{obj.name}}<br/>
 		  <font size="2" >{{obj.formula}}</font>
@@ -67,23 +58,29 @@
             </button>
         </ion-header-bar>
         <ion-content>
-            <form ng-submit="createTask(data)">
+            <form >
                 <div class="card">
-        <div class="row"><ion-label class = "col">Rx Number:</ion-label><div class = "col">{{rxNumber}}</div></div>
-		<div class="row"><ion-label class = "col">Qty Dispensed:</ion-label><div class = "col">{{qtyDisp}}</div></div>
-	   <div class="row"><ion-label class = "col">Route:</ion-label><div class = "col">{{route}}</div></div>
-	   <div class="row"><ion-label class = "col">Days Supply:</ion-label><div class = "col">{{daysSupply}}</div></div>
+        <div class="row"><ion-label class = "col">Rx Number:</ion-label><div class = "col">{{data.rxNumber}}</div></div>
+		<div class="row"><ion-label class = "col">Qty Dispensed:</ion-label><div class = "col">{{data.qtyDispensed}}</div></div>
+	   <div class="row"><ion-label class = "col">Route:</ion-label><div class = "col">{{data.route}}</div></div>
+	   <div class="row"><ion-label class = "col">Days Supply:</ion-label><div class = "col">{{data.daysSupply}}</div></div>
+   </div>
+    <div class="card"   >
+      <ion-list ng-repeat="ingredients in ingredients"  >
+		   <ion-label  class = "col" > &nbsp;{{ingredients.drugName}}<br/></ion-label>
+	     <div class="row" style="padding: 0px;top: 0px"  > <div class = "col-20"></div><ion-label class = "col">
+		 <font size="2" >Qty:{{ingredients.productQuantity}}</ion-label><ion-label class = "col-30">
+		 <div class = "col">Cost:${{ingredients.ingredientDrugCost}}</ion-label></font></div></div>  
+	 </ion-list>
+	
    </div>
    
-      
-	<button type="submit" class="button button-block" ng-style="{'background-color': '#ffffff'}" ng-click="submit()" ><i ng-style="{'color': '#faa730'}">Submit Claim</i></button>
- 			
-             
-               
-			
+ 
             </form>
 		
-			
+			   
+<div class="customButton" ng-click=showAlert(data.rxNumber) >Submit Claim</div>
+              	
         </ion-content>
     </ion-modal-view>
 </script>

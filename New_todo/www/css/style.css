@@ -1,1 +1,52 @@
 /* Empty. Add your own CSS if you like */
+.customButton {
+    text-align: center;
+    color: #faa730;
+	 font-size: 15px;
+}
+
+.popup-head {
+	
+  background-color : #faa730;
+  
+}
+.popup-title {
+
+    color: white;
+
+}
+
+.popup-buttons .button {
+
+    background-color: #faa730;
+	color: white;
+
+
+}
+.popup-buttons .button:hover{
+
+    background-color: #faa730;
+	color: white;
+
+}
+
+
+
+.popup-buttons .button.activated {
+	    background-color: #faa730;
+	color: white;
+
+
+}
+.popup-body {
+
+   display: inline-block;
+
+}
+
+.col {
+	    padding: 0px;
+	
+}
+	
+	
