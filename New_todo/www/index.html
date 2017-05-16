@@ -30,8 +30,12 @@
       <ion-header-bar class="bar-stable" ng-style="{'background-color': '#faa730','color': '#ffffff'}">
         <h1 class="title" ng-style="{'color': '#ffffff'}">FS Compounder</h1>
       </ion-header-bar>
-	  
-      <ion-content>
+	  <ion-content>
+
+	  	<div class="spinner">
+    <ion-spinner ng-if="name_List.length==0" name="crescent" ></ion-spinner>
+</div>
+<div ng-if="name_List.length!=0">
 	   <div class="item item-input-inset">
 <label class="item-input-wrapper">
 <input type="text" placeholder="Search Claims" ng-model="search">
@@ -45,7 +49,7 @@
         </ion-item>
 		
 	   </ion-list>
-	
+	</div>
       </ion-content>
     </ion-pane>
   </body>
@@ -58,7 +62,11 @@
             </button>
         </ion-header-bar>
         <ion-content>
-            <form >
+
+		<div class="spinner">
+    <ion-spinner ng-if="dataLoading" text-center name="crescent" ></ion-spinner>
+</div>
+            <form ng-if="dataLoading==false">
                 <div class="card">
         <div class="row"><ion-label class = "col">Rx Number:</ion-label><div class = "col">{{data.rxNumber}}</div></div>
 		<div class="row"><ion-label class = "col">Qty Dispensed:</ion-label><div class = "col">{{data.qtyDispensed}}</div></div>
@@ -75,11 +83,10 @@
 	
    </div>
    
- 
-            </form>
-		
-			   
-<div class="customButton" ng-click=showAlert(data.rxNumber) >Submit Claim</div>
+ <button class="button button-assertive button-clear col text-center" style="color:#faa730;" ng-click=showAlert(data.rxNumber)>
+   Submit Claim
+</button>
+</form>
               	
         </ion-content>
     </ion-modal-view>

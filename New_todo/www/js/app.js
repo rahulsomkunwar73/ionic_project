@@ -5,8 +5,9 @@
 // the 2nd parameter is an array of 'requires'
 var app = angular.module('starter', ['ionic'])
 
-app.run(function($ionicPlatform) {
+app.run(function($ionicPlatform,$ionicPopup) {
   $ionicPlatform.ready(function() {
+	
     if(window.cordova && window.cordova.plugins.Keyboard) {
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
       // for form inputs)
@@ -19,7 +20,20 @@ app.run(function($ionicPlatform) {
     }
     if(window.StatusBar) {
       StatusBar.styleDefault();
-    }
+    }	
+// Calling alert in case of not connected to any network
+	if(window.Connection) {
+                if(navigator.connection.type == Connection.NONE) {
+                    $ionicPopup.alert({
+                        title: "Internet Disconnected",
+                        content: "No Internet Connection.Make sure that Wi-Fi or cellular mobile data is turned on,then try again."
+                    })
+                    .then(function(result) {
+                        	ionic.Platform.exitApp();
+                        
+                    });
+                }
+            }
   });
 })
 
@@ -31,67 +45,69 @@ app.controller('main', function ($scope, $ionicModal,$ionicPopup,$http,myService
 	$scope.ingredients=[];
 	$scope.result;
 	$scope.Savings;
+	$scope.dataLoading = false ;
+	initController();
+	
+	
+	//init controller will be called first to get the claim list
+	function initController() {
 $http.get('https://fsc-test.api.u300.net/fscompounder/webapi/v1/scenarios', {
     headers: {
         "Authorization": 'Basic ZGNoZWxpOmFzaWRlNTU1',
-		"Content-Type": "raw"
-    }
+		}
   }).success(function(response){
   
 	$scope.name_List=response;  
+	
 	  
   
   });
-  
-  	
+}
+
+
+	//function call on click of claim to load claim details
+	$scope.openTaskModal = function (Objects) {
+		
+		$scope.data = Objects;
+		$scope.ingredients = Objects.ingredients;
+		
+        $scope.newTaskModal.show();
+    };
+		
+  	//template to load claim details
 	$ionicModal.fromTemplateUrl('new-task-modal.html', {
         scope: $scope,
         animation: 'slide-in-up'
     }).then(function (modal) {
         $scope.newTaskModal = modal;
     });
-
 	
-	$scope.openTaskModal = function (Objects) {
-		
-		$scope.data = Objects;
-		$scope.ingredients = Objects.ingredients;
-		console.log($scope.ingredients[0]);
-        $scope.newTaskModal.show();
-    };
-	
+	//function to hide claim details template
 	$scope.closeTaskModal = function () {
         $scope.newTaskModal.hide();
     };
-	
-			
+				
 
+	//function call to process claim and give response in alert form	
 	 $scope.showAlert = function(datas) {
-$scope.result = null;		 
-		    
-	/* 	  $http.post('https://fsc-test.api.u300.net/fscompounder/webapi/v1/process',datas, config).success(function(response){
-  
-	
-  }); */
-  
+	$scope.result = null;		 
+	$scope.dataLoading = true;
+	//calling factory to process claim by calling api 
    var myDataPromise = myService.getData(datas);
-    myDataPromise.then(function(result) {  
-
-       // this is only run after getData() resolves
+    myDataPromise.then(function(result) { 	
+	$scope.dataLoading = false;
        $scope.result = result;
-    
-	console.log("data.name =   "+JSON.stringify($scope.result));
- console.log($scope.result);
-	 console.log($scope.result.rejectionMessages.length);
-if($scope.result.rejectionMessages.length==0) 
+   if($scope.result.rejectionMessages.length==0) 
 {
 	$scope.Savings=Number(Number( $scope.result.submittedIngredientCost.substr(1).replace(/\,/g,""))-Number( $scope.result.pricedIngredientCost.substr(1).replace(/\,/g,""))).toFixed(2); 
   $scope.templateMessage='Submitted ingredient Cost: '+'$'+$scope.result.submittedIngredientCost.substr(1)+'<br/>'+'Priced Ingredient Cost: '+'$'+$scope.result.pricedIngredientCost.substr(1)+'<br/>'+
 	   'Ingredient Cost Savings :'+'$'+$scope.Savings;
 }
 else{
-	  $scope.templateMessage= $scope.result.rejectionMessages[0];
+	  $scope.templateMessage= $scope.result.rejectionMessages.toString();
 }
+
+
      var alertPopup = $ionicPopup.alert({
 		
        title: '<i style="color:#ffffff;">Claim was Priced<i>',
@@ -105,6 +121,7 @@ else{
 	
    };
 	})
+	// promise to call claim process api 
 .factory('myService', function($http) {
 	var config = {
                 headers: {
