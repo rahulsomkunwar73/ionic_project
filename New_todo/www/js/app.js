@@ -102,15 +102,17 @@ $http.get('https://fsc-test.api.u300.net/fscompounder/webapi/v1/scenarios', {
 	$scope.Savings=Number(Number( $scope.result.submittedIngredientCost.substr(1).replace(/\,/g,""))-Number( $scope.result.pricedIngredientCost.substr(1).replace(/\,/g,""))).toFixed(2); 
   $scope.templateMessage='Submitted ingredient Cost: '+'$'+$scope.result.submittedIngredientCost.substr(1)+'<br/>'+'Priced Ingredient Cost: '+'$'+$scope.result.pricedIngredientCost.substr(1)+'<br/>'+
 	   'Ingredient Cost Savings :'+'$'+$scope.Savings;
+	   $scope.titleMessage = '<i style="color:#ffffff;">Claim was Priced<i>';
 }
 else{
+	 $scope.titleMessage = '<i style="color:#ffffff;">Claim was Rejected<i>';
 	  $scope.templateMessage= $scope.result.rejectionMessages.toString();
 }
 
 
      var alertPopup = $ionicPopup.alert({
 		
-       title: '<i style="color:#ffffff;">Claim was Priced<i>',
+       title: $scope.titleMessage,
        template: $scope.templateMessage
 	   
 	  });
